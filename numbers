@@ -1,0 +1,372 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <vector>
+
+using namespace std;
+
+class Natural{
+    public: 
+    // default constructor
+    Natural(){
+        this->n = 1;
+    }
+
+    // parameterized constructor
+    Natural(int n){
+        // To check
+        if (n > 0) {
+            this->n = n;
+            return;
+        } 
+        this->n = 1;
+        return;
+    }
+
+    // Copy Constructor
+    Natural(Natural &Other){
+        if (Other.n > 0){
+            this->n = Other.n;
+            return;
+        } 
+        this->n = 1;
+        return;
+    }
+
+    // Getter 
+    int get(){
+        return this->n;
+    }
+
+    // Setter
+    void set(int n){
+        if (n > 0){
+            this->n = n;
+            return;
+        } 
+        this->n = 1;
+        return;
+    }
+
+    // Display
+    virtual void displayValue() {
+        cout << n << endl;
+    }
+
+    protected:
+    int n;
+};
+
+class Whole : public Natural {
+    public:
+    // Default Constructor
+    Whole() : Natural(0) {}
+
+    // Parameterized Constructor
+    Whole(int n) : Natural(n) {
+        if (n<0) {
+            this->n = 0;
+            return;
+        }
+    }
+
+    // Copy Constructor
+    Whole(const Whole& other) : Natural(other.n) {
+        if (other.n < 0) {
+            this->n = 0;
+            return;
+        }
+    }
+
+    // Setter
+    void set(int n) {
+        if (n<0) {
+            this->n = 0;
+            return;
+        }
+        this->n = n;
+    }
+
+    // Getter
+    int get() {
+        return n;
+    }
+
+    // Display
+    void displayValue() override {
+        cout << n << endl;
+    }
+};
+
+class Integer : public Whole {
+    public:
+    // Default Constructor
+    Integer() : Whole(0) {}
+
+    // Parameterized Constructor
+    Integer(int n) : Whole(n) {}
+
+    // Copy Constructor
+    Integer(const Integer& other) : Whole(other.n) {}
+
+    // Setter
+    void set(int n) {
+        this->n=n;
+    }
+
+    // Getter
+    int get() {
+        return n;
+    }
+
+    // Display
+    void displayValue() override {
+        cout << n << endl;
+    }
+};
+
+class Rational : public Integer {
+    private:
+    int p, q;
+
+    public:
+    // Default Constructor
+    Rational() : Integer(0), p(0), q(0) {}
+
+    // Parameterized Constructor
+    Rational(int p, int q) : Integer(p/q) {
+        this->p = p;
+        if (q==0) {
+            cout << "Denominator typed zero, defaulting to q=1" << endl;
+            this->q=1;
+            return;
+        }
+        this->q = q;
+    }
+
+    // Copy Constructor
+    Rational(const Rational& other) : Integer(other.p/other.q) {
+        this->p = other.p;
+        if (other.q==0) {
+            cout << "Denominator typed zero, defaulting to q=1" << endl;
+            this->q=1;
+            return;
+        }
+        this->q = other.q;
+    }
+
+    // Setter
+    void setP(int p) {
+        this->p = p;
+    }
+
+    void setQ(int q) {
+        if(q==0) {
+            cout << "Denominator typed zero, defaulting to q=1" << endl;
+            this->q=1;
+            return;
+        }
+        this->q = q;
+    }
+
+    // Getter
+    int getP() {
+        return p;
+    }
+
+    int getQ() {
+        return q;
+    }
+
+    // Display
+    void displayValue() override {
+        if (p==0 || q==1) {
+            cout << p << endl;
+            return;
+        }
+        cout << p << "/" << q << endl;
+    }
+};
+
+class Real {
+    public:
+    // Default Constructor
+    Real() {
+        r=0.0;
+    }
+
+    // Parameterized Constructor
+    Real(double r) {
+        this->r=r;
+    }
+
+    // Copy Constructor
+    Real(const Real& other) {
+        this->r = other.r;
+    }
+
+    // Setter
+    void set(double r) {
+        this->r = r;
+    }
+
+    //Getter
+    double get() {
+        return r;
+    }
+
+    //Display
+    virtual void displayValue() {
+        cout << r << endl;
+    }
+
+    protected:
+    double r;
+};
+
+class Complex : public Real {
+    private:
+    double r, c;
+
+    public:
+    // Default Constructor
+    Complex() : Real(0.0), r(0), c(0) {}
+
+    // Parameterized Constructor
+    Complex(double r, double c) : Real(r) {
+        this->r = r;
+        this->c = c;
+    }
+
+    // Copy Constructor
+    Complex(const Complex& other) : Real(other.r) {
+        this->r = other.r;
+        this->c = other.c;
+    }
+
+    // Setter
+    void setRealPart(double r) {
+        this->r = r;
+    }
+
+    void setImaginaryPart(double c) {
+        this->c = c;
+    }
+
+    // Getter
+    double getRealPart() {
+        return r;
+    }
+
+    double getImaginaryPart() {
+        return c;
+    }
+
+    // Display
+    void displayValue() override {
+        if (r==0) {
+            cout << c << "i" << endl;
+            return;
+        }
+
+        if (c==0) {
+            cout << r << endl;
+            return;
+        }
+
+        cout << r << " + " << c << "i" << endl;
+    }
+};
+
+int main() {
+    /*--------Natural Numbers--------*/
+    Natural num; // Default constructor
+    Natural num1(22); // Parameterized constructor
+    Natural num2 = num1; // Copy constructor
+    cout << "Natural Numbers\n";
+    num.displayValue();
+    cout << endl;
+    num1.displayValue();
+    cout << endl;
+    num2.displayValue();
+    cout << endl;
+    /*--------Natural Numbers--------*/
+
+
+    /*--------Whole Numbers--------*/
+    cout << "Whole Numbers\n";
+    Whole wnum; // Default constructor
+    Whole wnum1(-31); // Parameterized constructor
+    Whole wnum2 = wnum1; // Copy constructor
+
+    wnum.displayValue();
+    cout << endl;
+    wnum1.displayValue();
+    cout << endl;
+    wnum2.displayValue();
+    cout << endl;
+    /*--------Whole Numbers--------*/
+
+    /*--------Integers--------*/
+    cout << "Integers\n";
+    Integer inum; // Default constructor
+    Integer inum1(-31); // Parameterized constructor
+    Integer inum2 = inum1; // Copy constructor
+
+    inum.displayValue();
+    cout << endl;
+    inum1.displayValue();
+    cout << endl;
+    inum2.displayValue();
+    cout << endl;
+    inum1.set(-129); // Setter
+    inum1.displayValue();
+    cout << endl;
+    /*--------Integers--------*/
+
+    /*--------Ratoinal Numbers--------*/
+    cout << "Rational Numbers\n";
+    Rational rnum; // Default constructor
+    Rational rnum1(2, 3); // Parameterized constructor
+    Rational rnum2 = rnum1; // Copy constructor
+    Rational rnum3(2, 3); // error check
+    rnum.displayValue();
+    cout << endl;
+    rnum1.displayValue();
+    cout << endl;
+    rnum2.displayValue();
+    cout << endl;
+    rnum3.displayValue();
+    cout << endl;
+    cout << "p = " << rnum2.getP() << endl << endl; // Getter
+    /*--------Ratoinal Numbers--------*/
+
+    /*--------Real Numbers--------*/
+    cout << "Real Numbers\n";
+    Real renum; // Default constructor
+    Real renum1(-655.2332); // Parameterized constructor
+    Real renum2 = renum1; // Copy constructor
+    renum.displayValue();
+    cout << endl;
+    renum1.displayValue();
+    cout << endl;
+    renum2.displayValue();
+    cout << endl;
+    /*--------Real Numbers--------*/
+
+    /*--------Complex Numbers--------*/
+    cout << "Rational Numbers\n";
+    Complex cnum; // Default constructor
+    Complex cnum1(5.76, 22.22); // Parameterized constructor
+    Complex cnum2 = cnum1; // Copy constructor
+    cnum.displayValue();
+    cout << endl;
+    cnum1.displayValue();
+    cout << endl;
+    cnum2.displayValue();
+    cout << endl;
+    /*--------Complex Numbers--------*/
+
+    return 0;
+}
+    
